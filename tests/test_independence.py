@@ -58,15 +58,8 @@ class TestIndependence(unittest.TestCase):
         self.assertEqual(self.game.chess_board_size == 64, True)
 
     # ///////////////////////////////////////////////////
-    def bit_board_is_valid(self):
-        """
-            Tests bit board creation
-        """
-        self.assertEqual(len(self.game.create_bit_board(3, 4)) == 12, True)
-
-    # ///////////////////////////////////////////////////
     def check_coord_tranformations(self):
         """
             Checks coordinate transformation
         """
-        self.assertEqual(self.game.coords_to_index((5, 5), 8) == 45, True)
+        self.assertEqual(self.game.coords_to_index((5, 5)) == 45, True)

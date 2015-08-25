@@ -45,26 +45,32 @@ class Independence(object):
                 * `self.params`         : A dictionary with the problem parameters.
         """
 
-        self.params = params
-        self.chess_board = self.create_bit_board(params["m"], params["n"])
+        self.rows = params["m"]
+        self.cols = params["n"]
+        self.kings = params["k"]
+        self.queens = params["q"]
+        self.rooks = params["r"]
+        self.bishops = params["b"]
+        self.knights = params["kn"]
+        self.chess_board = self.create_bit_board()
         self.chess_board_size = len(self.chess_board)
 
-    @classmethod
-    def create_bit_board(cls, num_rows, num_cols):
+    # ///////////////////////////////////////////////////
+    def create_bit_board(self):
         """
             creates a one-dimension representation
             of a clear mxn chess board
         """
-        bit_board = [0] * num_rows * num_cols
+        bit_board = [0] * self.rows * self.cols
         return bit_board
 
-    @classmethod
-    def coords_to_index(cls, coords, num_cols):
+    # ///////////////////////////////////////////////////
+    def coords_to_index(self, coords):
         """
             converts a set of cartesian
             coordinates to array index
         """
-        return (coords[0] * num_cols) + coords[1]
+        return (coords[0] * self.cols) + coords[1]
 
     # ///////////////////////////////////////////////////
     def play(self):
