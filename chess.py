@@ -65,18 +65,28 @@ def chess():
 
     if args.k_num:
         params["k"] = int(args.k_num)
+    else:
+        params["k"] = 0
 
     if args.q_num:
         params["q"] = int(args.q_num)
+    else:
+        params["q"] = 0
 
     if args.r_num:
         args.params["r"] = int(args.r_num)
+    else:
+        params["r"] = 0
 
     if args.b_num:
         params["b"] = int(args.b_num)
+    else:
+        params["b"] = 0
 
     if args.kn_num:
         params["kn"] = int(args.kn_num)
+    else:
+        params["kn"] = 0
 
     return params
 

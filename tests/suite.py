@@ -39,7 +39,6 @@ def test_suite():
     all_tests.addTest(TestIndependence('x_dim_is_valid'))
     all_tests.addTest(TestIndependence('y_dim_is_valid'))
     all_tests.addTest(TestIndependence('chess_board_is_valid'))
-    all_tests.addTest(TestIndependence('bit_board_is_valid'))
     all_tests.addTest(TestIndependence('check_coord_tranformations'))
 
     return all_tests
