@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+    `run_tests` module is responsible for running all tests
+"""
+
 # -*- coding: utf-8 -*-
 
 # ///////////////////////////////////////////////////////////
@@ -19,9 +23,9 @@ import unittest
 from tests.suite import test_suite
 
 # ///////////////////////////////////////////////////
-# Execute 
+# Execute
 if __name__ == "__main__":
-    
+
     try:
         unittest.TextTestRunner(verbosity=2).run(test_suite())
     except KeyboardInterrupt:
