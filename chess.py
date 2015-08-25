@@ -21,7 +21,7 @@ import argparse
 # ///////////////////////////////////////////////////
 # Custom modules
 # ---------------------------------------------------
-from .independence import Independence
+from independence import Independence
 
 # ///////////////////////////////////////////////////
 #  Chess - command line interface
@@ -54,29 +54,29 @@ def chess():
     params = {}
 
     if args.x_dim:
-        params["m"] = args.x_dim
+        params["m"] = int(args.x_dim)
     else:
         return False
 
     if args.y_dim:
-        params["n"] = args.y_dim
+        params["n"] = int(args.y_dim)
     else:
         return False
 
     if args.k_num:
-        params["k"] = args.k_num
+        params["k"] = int(args.k_num)
 
     if args.q_num:
-        params["q"] = args.q_num
+        params["q"] = int(args.q_num)
 
     if args.r_num:
-        args.params["r"] = args.r_num
+        args.params["r"] = int(args.r_num)
 
     if args.b_num:
-        params["b"] = args.b_num
+        params["b"] = int(args.b_num)
 
     if args.kn_num:
-        params["kn"] = args.kn_num
+        params["kn"] = int(args.kn_num)
 
     return params
 
