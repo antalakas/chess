@@ -42,5 +42,8 @@ def test_suite():
     all_tests.addTest(TestIndependence('coord_tranformations'))
     all_tests.addTest(TestIndependence('king_attacks'))
     all_tests.addTest(TestIndependence('knight_attacks'))
+    all_tests.addTest(TestIndependence('queen_attacks'))
+    all_tests.addTest(TestIndependence('rook_attacks'))
+    all_tests.addTest(TestIndependence('bishop_attacks'))
 
     return all_tests

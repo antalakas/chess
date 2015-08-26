@@ -38,10 +38,7 @@ class TestIndependence(unittest.TestCase):
 
     # ///////////////////////////////////////////////////
     def compare_bit_boards(self, first, second):
-        if set(first) == set(second):
-            return True
-        else:
-            return False
+        return first == second
 
     # ///////////////////////////////////////////////////
     def x_dim_is_valid(self):
@@ -76,15 +73,38 @@ class TestIndependence(unittest.TestCase):
         """
             Checks knight attacks
         """
-        bitboard =  [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.assertEqual(self.compare_bit_boards(self.game.king_attacks(0, 0), bitboard), True)
+        bit_board =  [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.assertEqual(self.compare_bit_boards(self.game.king_attacks(0, 0), bit_board), True)
 
     # ///////////////////////////////////////////////////
     def knight_attacks(self):
         """
             Checks knight attacks
         """
-        bitboard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.assertEqual(self.compare_bit_boards(self.game.knight_attacks(0, 0), bitboard), True)
+        bit_board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.assertEqual(self.compare_bit_boards(self.game.knight_attacks(0, 0), bit_board), True)
 
+    # ///////////////////////////////////////////////////
+    def queen_attacks(self):
+        """
+            Checks queen attacks
+        """
+        bit_board = [1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
+        self.assertEqual(self.compare_bit_boards(self.game.queen_attacks(0, 3), bit_board), True)
 
+    # ///////////////////////////////////////////////////
+    def rook_attacks(self):
+        """
+            Checks rook attacks
+        """
+        bit_board = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1]
+        self.assertEqual(self.compare_bit_boards(self.game.rook_attacks(3, 7), bit_board), True)
+
+    # ///////////////////////////////////////////////////
+    def bishop_attacks(self):
+        """
+            Checks bishop attacks
+        """
+        attacks = self.game.bishop_attacks(0, 3)
+        bit_board = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.assertEqual(self.compare_bit_boards(attacks, bit_board), True)
