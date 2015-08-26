@@ -88,6 +88,7 @@ class Independence(object):
         for pos in moves:
             index = self.coords_to_index(pos)
             bit_board[index] = 1
+
         return bit_board
 
     # ///////////////////////////////////////////////////
@@ -105,6 +106,71 @@ class Independence(object):
         for pos in moves:
             index = self.coords_to_index(pos)
             bit_board[index] = 1
+
+        return bit_board
+
+    # ///////////////////////////////////////////////////
+    def queen_attacks(self, x_coord, y_coord):
+        """
+            for given coordinates,calculates queen's attack
+            sparse bitboard, where biboard[index] = 1
+            denotes an index (coordinate) under attack
+        """
+        bit_board = self.create_bit_board()
+
+        for i in range(self.cols):
+            if i != y_coord:
+                bit_board[x_coord*self.cols + i] = 1
+                r1 = x_coord + y_coord - i
+                r2 = x_coord + i - y_coord
+                if 0 <= r1 and r1 < self.rows:
+                  bit_board[r1*self.cols + i] = 1
+                if 0 <= r2 and r2 < self.rows:
+                  bit_board[r2*self.cols + i] = 1
+
+        for i in range(self.rows):
+            if i != x_coord:
+                bit_board[i*self.cols + y_coord] = 1
+
+        return bit_board
+
+    # ///////////////////////////////////////////////////
+    def rook_attacks(self, x_coord, y_coord):
+        """
+            for given coordinates,calculates rook's attack
+            sparse bitboard, where biboard[index] = 1
+            denotes an index (coordinate) under attack
+        """
+        bit_board = self.create_bit_board()
+
+        for i in range(self.cols):
+            if i != y_coord:
+                bit_board[x_coord*self.cols + i] = 1
+
+        for i in range(self.rows):
+            if i != x_coord:
+                bit_board[i*self.cols + y_coord] = 1
+
+        return bit_board
+
+    # ///////////////////////////////////////////////////
+    def bishop_attacks(self, x_coord, y_coord):
+        """
+            for given coordinates,calculates bishop's attack
+            sparse bitboard, where biboard[index] = 1
+            denotes an index (coordinate) under attack
+        """
+        bit_board = self.create_bit_board()
+
+        for i in range(self.cols):
+            if i != y_coord:
+                r1 = x_coord + y_coord - i
+                r2 = x_coord + i - y_coord
+                if 0 <= r1 and r1 < self.rows:
+                    bit_board[r1*self.cols + i] = 1
+                if 0 <= r2 and r2 < self.rows:
+                    bit_board[r2*self.cols + i] = 1
+
         return bit_board
 
     # ///////////////////////////////////////////////////
