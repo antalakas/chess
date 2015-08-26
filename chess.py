@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
+# -*- coding: utf-8 -*-
+
 """
     `chess` module collects input arguments and creates a
     dictionary to be used as an input to Independence class
 """
-
-# -*- coding: utf-8 -*-
 
 # ///////////////////////////////////////////////////
 # ---------------------------------------------------
