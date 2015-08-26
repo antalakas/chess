@@ -18,7 +18,7 @@
 
 # ///////////////////////////////////////////////////
 # Python packages
-# from itertools import product
+from itertools import product
 # import math
 # ---------------------------------------------------
 
@@ -47,11 +47,11 @@ class Independence(object):
 
         self.rows = params["m"]
         self.cols = params["n"]
-        self.kings = params["k"]
-        self.queens = params["q"]
-        self.rooks = params["r"]
-        self.bishops = params["b"]
-        self.knights = params["kn"]
+        # self.kings = params["k"]
+        # self.queens = params["q"]
+        # self.rooks = params["r"]
+        # self.bishops = params["b"]
+        # self.knights = params["kn"]
         self.chess_board = self.create_bit_board()
         self.chess_board_size = len(self.chess_board)
 
@@ -73,8 +73,44 @@ class Independence(object):
         return (coords[0] * self.cols) + coords[1]
 
     # ///////////////////////////////////////////////////
+    def king_attacks(self, x_coord, y_coord):
+        """
+            for given coordinates,calculates king's attack
+            sparse bitboard, where biboard[index] = 1
+            denotes an index (coordinate) under attack
+        """
+        bit_board = self.create_bit_board()
+        moves = list(product([x_coord-1, x_coord+1], [y_coord-1, y_coord+1])) + \
+                list(product([x_coord], [y_coord-1, y_coord+1])) + \
+                list(product([x_coord-1, x_coord+1], [y_coord]))
+        moves = [(x_coord, y_coord) for x_coord, y_coord in moves
+                 if x_coord >= 0 and y_coord >= 0 and x_coord < self.rows and y_coord < self.cols]
+        for pos in moves:
+            index = self.coords_to_index(pos)
+            bit_board[index] = 1
+        return bit_board
+
+    # ///////////////////////////////////////////////////
+    def knight_attacks(self, x_coord, y_coord):
+        """
+            for given coordinates,calculates knight's attack
+            sparse bitboard, where biboard[index] = 1
+            denotes an index (coordinate) under attack
+        """
+        bit_board = self.create_bit_board()
+        moves = list(product([x_coord-1, x_coord+1], [y_coord-2, y_coord+2])) + \
+                list(product([x_coord-2, x_coord+2], [y_coord-1, y_coord+1]))
+        moves = [(x_coord, y_coord) for x_coord, y_coord in moves
+                 if x_coord >= 0 and y_coord >= 0 and x_coord < self.rows and y_coord < self.cols]
+        for pos in moves:
+            index = self.coords_to_index(pos)
+            bit_board[index] = 1
+        return bit_board
+
+    # ///////////////////////////////////////////////////
     def play(self):
         """
             `play()` is a public method of class Independence.
             It is used to play the independence game.
         """
+        print self.knight_attacks(0, 0)
