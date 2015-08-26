@@ -38,7 +38,9 @@ def test_suite():
     # Adding TestIndependence tests
     all_tests.addTest(TestIndependence('x_dim_is_valid'))
     all_tests.addTest(TestIndependence('y_dim_is_valid'))
-    all_tests.addTest(TestIndependence('chess_board_is_valid'))
-    all_tests.addTest(TestIndependence('check_coord_tranformations'))
+    all_tests.addTest(TestIndependence('board_is_valid'))
+    all_tests.addTest(TestIndependence('coord_tranformations'))
+    all_tests.addTest(TestIndependence('king_attacks'))
+    all_tests.addTest(TestIndependence('knight_attacks'))
 
     return all_tests
