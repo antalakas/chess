@@ -1,9 +1,45 @@
-"""
-    `independence` module is responsible for providing a basic interface for
-    playing the chess independence game.
-"""
-
 # -*- coding: utf-8 -*-
+
+"""
+    `independence` module is responsible for providing a basic
+    interface for playing the chess independence game.
+
+    The problem
+    -----------
+    Find all unique configurations of a set of normal chess
+    pieces on a chess board with dimensions M×N where none of
+    the pieces is in a position to take any of the others.
+    Assume the colour of the piece does not matter, and that
+    there are no pawns among the pieces.
+
+    Write a program which takes as input:
+    The dimensions of the board: M, N
+    The number of pieces of each type (King, Queen, Bishop,
+    Rook and Knight) to try and place on the board.
+    As output, the program should list all the unique
+    configurations to the console for which all of the pieces
+    can be placed on the board without threatening each other.
+    -------------------------------------------------------------
+
+    Solution path
+    -------------
+    The algorithm, keeps placing pieces on the board until there
+    is no longer a safe square, modelling the human reaction to
+    the problem.
+
+    If the last piece has been placed, the solution is noted. If
+    fewer pieces than the total number of pieces have been placed,
+    then this is a dead end.  In either case, backtracking occurs.
+    The last piece placed on the board gets pulled, then it gets
+    moved to the next safe square. Backtrack occurs even after a
+    "good" attempt in order to get to a new solution. Backtracking
+    may repeat itself several times until the original misplaced
+    piece finally is proven to be a dead end.
+
+    The "attack graph"  for each piece is precomputed up front,
+    and then we essentially ignore the geometry of the problem.
+    -------------------------------------------------------------
+"""
 
 # ///////////////////////////////////////////////////
 # ---------------------------------------------------
@@ -121,12 +157,12 @@ class Independence(object):
         for i in range(self.cols):
             if i != y_coord:
                 bit_board[x_coord*self.cols + i] = 1
-                r1 = x_coord + y_coord - i
-                r2 = x_coord + i - y_coord
-                if 0 <= r1 and r1 < self.rows:
-                  bit_board[r1*self.cols + i] = 1
-                if 0 <= r2 and r2 < self.rows:
-                  bit_board[r2*self.cols + i] = 1
+                r_1 = x_coord + y_coord - i
+                r_2 = x_coord + i - y_coord
+                if 0 <= r_1 and r_1 < self.rows:
+                    bit_board[r_1*self.cols + i] = 1
+                if 0 <= r_2 and r_2 < self.rows:
+                    bit_board[r_2*self.cols + i] = 1
 
         for i in range(self.rows):
             if i != x_coord:
@@ -164,12 +200,12 @@ class Independence(object):
 
         for i in range(self.cols):
             if i != y_coord:
-                r1 = x_coord + y_coord - i
-                r2 = x_coord + i - y_coord
-                if 0 <= r1 and r1 < self.rows:
-                    bit_board[r1*self.cols + i] = 1
-                if 0 <= r2 and r2 < self.rows:
-                    bit_board[r2*self.cols + i] = 1
+                r_1 = x_coord + y_coord - i
+                r_2 = x_coord + i - y_coord
+                if 0 <= r_1 and r_1 < self.rows:
+                    bit_board[r_1*self.cols + i] = 1
+                if 0 <= r_2 and r_2 < self.rows:
+                    bit_board[r_2*self.cols + i] = 1
 
         return bit_board
 

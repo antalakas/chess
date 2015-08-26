@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
+# -*- coding: utf-8 -*-
+
 """
     `run_tests` module is responsible for running all tests
 """
-
-# -*- coding: utf-8 -*-
 
 # ///////////////////////////////////////////////////////////
 # -----------------------------------------------------------
