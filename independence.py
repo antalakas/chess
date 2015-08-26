@@ -25,7 +25,12 @@
     -------------
     The algorithm, keeps placing pieces on the board until there
     is no longer a safe square, modelling the human reaction to
-    the problem.
+    the problem. The order of placement will be based on the
+    number of attacks a piece can provide in descending order,
+    which means Queen (q) -> Rook (r) -> Bishop (b) -> King (k)
+    -> Knight (n).
+
+    Notation: Queen: 6, Rook: 5, Bishop: 4, King: 3, Knight: 2
 
     If the last piece has been placed, the solution is noted. If
     fewer pieces than the total number of pieces have been placed,
@@ -36,8 +41,12 @@
     may repeat itself several times until the original misplaced
     piece finally is proven to be a dead end.
 
-    The "attack graph"  for each piece is precomputed up front,
+    The "attack graph" for each piece is precomputed up front,
     and then we essentially ignore the geometry of the problem.
+    The "attack graph" is presented as a bit board, a one
+    dimensional array transformation of the rectangular board
+    (according to the problem). Coordinate (0, 0) represents
+    the lower-left board square.
     -------------------------------------------------------------
 """
 
@@ -107,6 +116,26 @@ class Independence(object):
             coordinates to array index
         """
         return (coords[0] * self.cols) + coords[1]
+
+    # ///////////////////////////////////////////////////
+    def print_board(self, bit_board):
+        """
+            prints a bit board, taking into account
+            the fact that it has to calculate rows
+            and print them in reverse order
+        """
+        board_rows_dict = {}
+
+        for i in range(self.rows):
+            board_rows_dict[i] = [None] * self.cols
+            for j in range(self.cols):
+                index = self.coords_to_index((i, j))
+                board_rows_dict[i][j] = bit_board[index]
+
+        for i in reversed(range(self.rows)):
+            print board_rows_dict[i]
+
+        print '\n'
 
     # ///////////////////////////////////////////////////
     def king_attacks(self, x_coord, y_coord):
@@ -198,6 +227,9 @@ class Independence(object):
         """
         bit_board = self.create_bit_board()
 
+        index = self.coords_to_index((x_coord, y_coord))
+        bit_board[index] = 4
+
         for i in range(self.cols):
             if i != y_coord:
                 r_1 = x_coord + y_coord - i
@@ -215,4 +247,18 @@ class Independence(object):
             `play()` is a public method of class Independence.
             It is used to play the independence game.
         """
-        print self.knight_attacks(0, 0)
+
+        attacks = self.queen_attacks(4, 5)
+        self.print_board(attacks)
+
+        attacks = self.rook_attacks(4, 5)
+        self.print_board(attacks)
+
+        attacks = self.bishop_attacks(4, 5)
+        self.print_board(attacks)
+
+        attacks = self.king_attacks(4, 5)
+        self.print_board(attacks)
+
+        attacks = self.knight_attacks(4, 5)
+        self.print_board(attacks)
