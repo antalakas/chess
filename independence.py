@@ -30,8 +30,6 @@
     which means Queen (q) -> Rook (r) -> Bishop (b) -> King (k)
     -> Knight (n).
 
-    Notation: Queen: 6, Rook: 5, Bishop: 4, King: 3, Knight: 2
-
     If the last piece has been placed, the solution is noted. If
     fewer pieces than the total number of pieces have been placed,
     then this is a dead end.  In either case, backtracking occurs.
@@ -88,7 +86,17 @@ class Independence(object):
             Independence.
 
             Attributes:
-                * `self.params`         : A dictionary with the problem parameters.
+                * `self.rows`           : number of board's rows
+                * `self.cols`           : number of board's columns
+                * `self.num_queens`     : number of queens
+                * `self.under_attack`   : dictionary of attack bit boards for a queen placed on
+                                          every square on a given board
+                * `self.queens`         : array of queen positions (in algorithm)
+                * `self.board_status`   : a dictionary of board statuses that is populated every
+                                          time we put a queen "on board"
+                * `self.pos`            : position under examination (in algorithm)
+                * `self.num_solutions`  : after algorithm convergence
+                * `self.num_backtracks` : after algorithm convergence
         """
 
         self.rows = params["m"]
@@ -103,7 +111,7 @@ class Independence(object):
 
         self.under_attack = {}
         self.queens = []
-        self.queens_status = {}
+        self.board_status = {}
         self.pos = 0
         self.num_solutions = 0
         self.num_backtracks = 0
@@ -269,8 +277,8 @@ class Independence(object):
             a piece from the board
         """
         self.pos = self.queens.pop()
-        self.board = self.queens_status[self.pos]
-        del self.queens_status[self.pos]
+        self.board = self.board_status[self.pos]
+        del self.board_status[self.pos]
         self.pos += 1
         self.num_backtracks += 1
         # self.print_board(self.board)
@@ -321,7 +329,7 @@ class Independence(object):
 
             # If a square is empty
             if self.board[self.pos] == 0:
-                self.queens_status[self.pos] = list(self.board)
+                self.board_status[self.pos] = list(self.board)
                 self.attack(self.pos)
                 self.queens.append(self.pos)
                 if len(self.queens) == self.num_queens:
