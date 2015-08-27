@@ -1,7 +1,8 @@
 A chess independence game in python
+==============================================================================
 
-The problem
------------
+##The problem
+
 Find all unique configurations of a set of normal chess
 pieces on a chess board with dimensions M×N where none of
 the pieces is in a position to take any of the others.
@@ -15,10 +16,9 @@ Rook and Knight) to try and place on the board.
 As output, the program should list all the unique
 configurations to the console for which all of the pieces
 can be placed on the board without threatening each other.
--------------------------------------------------------------
 
-Solution path
--------------
+##Solution path
+
 The algorithm, keeps placing pieces on the board until there
 is no longer a safe square, modelling the human reaction to
 the problem. The order of placement will be computed based
@@ -39,6 +39,5 @@ The "attack graph" is presented as a bit board, a one
 dimensional array transformation of the rectangular board
 (according to the problem). Coordinate (0, 0) represents
 the lower-left board square.
--------------------------------------------------------------
 
 https://en.wikipedia.org/wiki/Mathematical_chess_problem
