@@ -88,10 +88,12 @@ class Independence(object):
             Attributes:
                 * `self.rows`           : number of board's rows
                 * `self.cols`           : number of board's columns
-                * `self.num_queens`     : number of queens
+                * `self.num_of_pieces`  : number of pieces
                 * `self.under_attack`   : dictionary of attack bit boards for a queen placed on
                                           every square on a given board
-                * `self.queens`         : array of queen positions (in algorithm)
+                * `self.problem_list`   : array of pieces to be checked against each other, having
+                                          order according to problem description
+                * `self.solution_list`  : array of pieces' positions (evolving in algorithm)
                 * `self.board_status`   : a dictionary of board statuses that is populated every
                                           time we put a queen "on board"
                 * `self.pos`            : position under examination (in algorithm)
@@ -101,16 +103,26 @@ class Independence(object):
 
         self.rows = params["m"]
         self.cols = params["n"]
-        # self.num_kings = params["k"]
-        self.num_queens = params["q"]
-        # self.num_rooks = params["r"]
-        # self.num_bishops = params["b"]
-        # self.num_knights = params["kn"]
+
         self.board = self.create_bit_board()
         self.chess_board_size = len(self.board)
 
+        self.problem_list = []
+        for _ in range(params["kn"]):
+            self.problem_list.append('n')
+        for _ in range(params["k"]):
+            self.problem_list.append('k')
+        for _ in range(params["b"]):
+            self.problem_list.append('b')
+        for _ in range(params["r"]):
+            self.problem_list.append('r')
+        for _ in range(params["q"]):
+            self.problem_list.append('q')
+
+        self.num_of_pieces = len(self.problem_list)
+        self.solution_list = []
+
         self.under_attack = {}
-        self.queens = []
         self.board_status = {}
         self.pos = 0
         self.num_solutions = 0
@@ -260,15 +272,46 @@ class Independence(object):
 
         return bit_board
 
+
+    # ///////////////////////////////////////////////////
+    def pre_compute(self):
+        """
+            `pre_compute()` is a public method of class Independence.
+            It is used to precompute all possible attacks.
+        """
+        start = time.time()
+
+        self.under_attack['q'] = {}
+        self.under_attack['r'] = {}
+        self.under_attack['b'] = {}
+        self.under_attack['k'] = {}
+        self.under_attack['n'] = {}
+        for i in range(self.rows * self.cols):
+            row = int(math.floor(i / self.cols))
+            col = i % self.cols
+            self.under_attack['q'][i] = self.queen_attacks(row, col)
+            self.under_attack['r'][i] = self.rook_attacks(row, col)
+            self.under_attack['b'][i] = self.bishop_attacks(row, col)
+            self.under_attack['k'][i] = self.king_attacks(row, col)
+            self.under_attack['n'][i] = self.knight_attacks(row, col)
+        end = time.time()
+
+        print "precomputation time (sec): "
+        print end - start
+
     # ///////////////////////////////////////////////////
     def attack(self, position):
         """
             calculates the board state after setting a
             piece "on board"
         """
+        # retrieve a piece from problem specification
+        piece = self.problem_list.pop()
         for i in range(self.rows * self.cols):
-            self.board[i] = self.board[i] or self.under_attack[position][i]
+            # calculate new board based on attacks of specific piece
+            self.board[i] = self.board[i] or self.under_attack[piece][position][i]
         # self.print_board(self.board)
+        return piece
 
     # ///////////////////////////////////////////////////
     def backtrack(self):
@@ -276,7 +319,8 @@ class Independence(object):
             recalls a board state after removing
             a piece from the board
         """
-        self.pos = self.queens.pop()
+        (self.pos, piece) = self.solution_list.pop()
+        self.problem_list.append(piece)
         self.board = self.board_status[self.pos]
         del self.board_status[self.pos]
         self.pos += 1
@@ -290,53 +334,28 @@ class Independence(object):
             It is used to play the independence game.
         """
 
-        # attacks = self.queen_attacks(4, 5)
-        # self.print_board(attacks)
-        #
-        # attacks = self.rook_attacks(4, 5)
-        # self.print_board(attacks)
-        #
-        # attacks = self.bishop_attacks(4, 5)
-        # self.print_board(attacks)
-        #
-        # attacks = self.king_attacks(4, 5)
-        # self.print_board(attacks)
-        #
-        # attacks = self.knight_attacks(4, 5)
-        # self.print_board(attacks)
-
-        start = time.time()
-        # precomputation
-        for i in range(self.rows * self.cols):
-            row = int(math.floor(i / self.cols))
-            col = i % self.cols
-            self.under_attack[i] = self.queen_attacks(row, col)
-            # self.print_board(self.under_attack[i])
-        end = time.time()
-
-        print "precomputation time (sec): "
-        print end - start
+        self.pre_compute()
 
         start = time.time()
 
-        # Find solutions in mxn board for x queens
+        # Find solutions in mxn board for arbitrary pieces
         while True:
             if self.pos >= self.rows * self.cols:
-                if len(self.queens) == 0:
+                if len(self.solution_list) == 0:
                     break
                 self.backtrack()
                 continue
 
             # If a square is empty
             if self.board[self.pos] == 0:
+                # Save board status to remember in case of backtrack
                 self.board_status[self.pos] = list(self.board)
-                self.attack(self.pos)
-                self.queens.append(self.pos)
-                if len(self.queens) == self.num_queens:
+                piece = self.attack(self.pos)
+                self.solution_list.append((self.pos, piece))
+                if len(self.solution_list) == self.num_of_pieces:
                     self.num_solutions += 1
-                    # print self.queens
-                    # print '\n'
-                    # show_queens queens, n
+                    print self.solution_list
+                    print '\n'
                     self.backtrack()
             self.pos += 1
 
