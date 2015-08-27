@@ -74,7 +74,7 @@ def chess():
         params["q"] = 0
 
     if args.r_num:
-        args.params["r"] = int(args.r_num)
+        params["r"] = int(args.r_num)
     else:
         params["r"] = 0
 
