@@ -64,7 +64,8 @@
 # ///////////////////////////////////////////////////
 # Python packages
 from itertools import product
-# import math
+import math
+import time
 # ---------------------------------------------------
 
 # ///////////////////////////////////////////////////
@@ -92,13 +93,20 @@ class Independence(object):
 
         self.rows = params["m"]
         self.cols = params["n"]
-        # self.kings = params["k"]
-        # self.queens = params["q"]
-        # self.rooks = params["r"]
-        # self.bishops = params["b"]
-        # self.knights = params["kn"]
-        self.chess_board = self.create_bit_board()
-        self.chess_board_size = len(self.chess_board)
+        # self.num_kings = params["k"]
+        self.num_queens = params["q"]
+        # self.num_rooks = params["r"]
+        # self.num_bishops = params["b"]
+        # self.num_knights = params["kn"]
+        self.board = self.create_bit_board()
+        self.chess_board_size = len(self.board)
+
+        self.under_attack = {}
+        self.queens = []
+        self.queens_status = {}
+        self.pos = 0
+        self.num_solutions = 0
+        self.num_backtracks = 0
 
     # ///////////////////////////////////////////////////
     def create_bit_board(self):
@@ -183,6 +191,9 @@ class Independence(object):
         """
         bit_board = self.create_bit_board()
 
+        index = self.coords_to_index((x_coord, y_coord))
+        bit_board[index] = 1
+
         for i in range(self.cols):
             if i != y_coord:
                 bit_board[x_coord*self.cols + i] = 1
@@ -228,7 +239,7 @@ class Independence(object):
         bit_board = self.create_bit_board()
 
         index = self.coords_to_index((x_coord, y_coord))
-        bit_board[index] = 4
+        bit_board[index] = 1
 
         for i in range(self.cols):
             if i != y_coord:
@@ -242,23 +253,88 @@ class Independence(object):
         return bit_board
 
     # ///////////////////////////////////////////////////
+    def attack(self, position):
+        """
+            calculates the board state after setting a
+            piece "on board"
+        """
+        for i in range(self.rows * self.cols):
+            self.board[i] = self.board[i] or self.under_attack[position][i]
+        # self.print_board(self.board)
+
+    # ///////////////////////////////////////////////////
+    def backtrack(self):
+        """
+            recalls a board state after removing
+            a piece from the board
+        """
+        self.pos = self.queens.pop()
+        self.board = self.queens_status[self.pos]
+        del self.queens_status[self.pos]
+        self.pos += 1
+        self.num_backtracks += 1
+        # self.print_board(self.board)
+
+    # ///////////////////////////////////////////////////
     def play(self):
         """
             `play()` is a public method of class Independence.
             It is used to play the independence game.
         """
 
-        attacks = self.queen_attacks(4, 5)
-        self.print_board(attacks)
+        # attacks = self.queen_attacks(4, 5)
+        # self.print_board(attacks)
+        #
+        # attacks = self.rook_attacks(4, 5)
+        # self.print_board(attacks)
+        #
+        # attacks = self.bishop_attacks(4, 5)
+        # self.print_board(attacks)
+        #
+        # attacks = self.king_attacks(4, 5)
+        # self.print_board(attacks)
+        #
+        # attacks = self.knight_attacks(4, 5)
+        # self.print_board(attacks)
 
-        attacks = self.rook_attacks(4, 5)
-        self.print_board(attacks)
+        start = time.time()
+        # precomputation
+        for i in range(self.rows * self.cols):
+            row = int(math.floor(i / self.cols))
+            col = i % self.cols
+            self.under_attack[i] = self.queen_attacks(row, col)
+            # self.print_board(self.under_attack[i])
+        end = time.time()
 
-        attacks = self.bishop_attacks(4, 5)
-        self.print_board(attacks)
+        print "precomputation time (sec): "
+        print end - start
 
-        attacks = self.king_attacks(4, 5)
-        self.print_board(attacks)
+        start = time.time()
 
-        attacks = self.knight_attacks(4, 5)
-        self.print_board(attacks)
+        # Find solutions in mxn board for x queens
+        while True:
+            if self.pos >= self.rows * self.cols:
+                if len(self.queens) == 0:
+                    break
+                self.backtrack()
+                continue
+
+            # If a square is empty
+            if self.board[self.pos] == 0:
+                self.queens_status[self.pos] = list(self.board)
+                self.attack(self.pos)
+                self.queens.append(self.pos)
+                if len(self.queens) == self.num_queens:
+                    self.num_solutions += 1
+                    # print self.queens
+                    # print '\n'
+                    # show_queens queens, n
+                    self.backtrack()
+            self.pos += 1
+
+        end = time.time()
+
+        print "calculation time (sec): "
+        print end - start
+        print "num of solutions: " + str(self.num_solutions)
+        print "num of backtracks: " + str(self.num_backtracks)
