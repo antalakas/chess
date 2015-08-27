@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    `test_independence` module is responsible for setting up
+    `test_independence1` module is responsible for setting up
     and running tests related to Independence module
 """
 
@@ -22,9 +22,9 @@ import unittest
 # ///////////////////////////////////////////////////
 
 
-class TestIndependence(unittest.TestCase):
+class TestIndependence1(unittest.TestCase):
     """
-        `TestIndependence()` class is unit-testing the class
+        `TestIndependence1()` class is unit-testing the class
         Independence().
     """
 
@@ -34,6 +34,10 @@ class TestIndependence(unittest.TestCase):
         params["m"] = 8
         params["n"] = 8
         params["q"] = 8
+        params["r"] = 0
+        params["b"] = 0
+        params["k"] = 0
+        params["kn"] = 0
         self.game = Independence(params)
 
     # ///////////////////////////////////////////////////
@@ -78,7 +82,7 @@ class TestIndependence(unittest.TestCase):
             Checks knight attacks
         """
         attacks = self.game.king_attacks(0, 0)
-        bit_board = [0, 1, 0, 0, 0, 0, 0, 0,
+        bit_board = [1, 1, 0, 0, 0, 0, 0, 0,
                      1, 1, 0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0, 0, 0,
@@ -94,7 +98,7 @@ class TestIndependence(unittest.TestCase):
             Checks knight attacks
         """
         attacks = self.game.knight_attacks(0, 0)
-        bit_board = [0, 0, 0, 0, 0, 0, 0, 0,
+        bit_board = [1, 0, 0, 0, 0, 0, 0, 0,
                      0, 0, 1, 0, 0, 0, 0, 0,
                      0, 1, 0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0, 0, 0,
@@ -110,7 +114,7 @@ class TestIndependence(unittest.TestCase):
             Checks queen attacks
         """
         attacks = self.game.queen_attacks(0, 3)
-        bit_board = [1, 1, 1, 0, 1, 1, 1, 1,
+        bit_board = [1, 1, 1, 1, 1, 1, 1, 1,
                      0, 0, 1, 1, 1, 0, 0, 0,
                      0, 1, 0, 1, 0, 1, 0, 0,
                      1, 0, 0, 1, 0, 0, 1, 0,
@@ -129,7 +133,7 @@ class TestIndependence(unittest.TestCase):
         bit_board = [0, 0, 0, 0, 0, 0, 0, 1,
                      0, 0, 0, 0, 0, 0, 0, 1,
                      0, 0, 0, 0, 0, 0, 0, 1,
-                     1, 1, 1, 1, 1, 1, 1, 0,
+                     1, 1, 1, 1, 1, 1, 1, 1,
                      0, 0, 0, 0, 0, 0, 0, 1,
                      0, 0, 0, 0, 0, 0, 0, 1,
                      0, 0, 0, 0, 0, 0, 0, 1,
@@ -142,7 +146,7 @@ class TestIndependence(unittest.TestCase):
             Checks bishop attacks
         """
         attacks = self.game.bishop_attacks(0, 3)
-        bit_board = [0, 0, 0, 0, 0, 0, 0, 0,
+        bit_board = [0, 0, 0, 1, 0, 0, 0, 0,
                      0, 0, 1, 0, 1, 0, 0, 0,
                      0, 1, 0, 0, 0, 1, 0, 0,
                      1, 0, 0, 0, 0, 0, 1, 0,
@@ -151,3 +155,11 @@ class TestIndependence(unittest.TestCase):
                      0, 0, 0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0, 0, 0]
         self.assertEqual(self.compare_bit_boards(attacks, bit_board), True)
+
+    # ///////////////////////////////////////////////////
+    def eight_queens(self):
+        """
+            8 queens
+        """
+        self.game.play()
+        self.assertEqual(self.game.num_solutions == 92, True)

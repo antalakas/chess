@@ -3,49 +3,6 @@
 """
     `independence` module is responsible for providing a basic
     interface for playing the chess independence game.
-
-    The problem
-    -----------
-    Find all unique configurations of a set of normal chess
-    pieces on a chess board with dimensions M×N where none of
-    the pieces is in a position to take any of the others.
-    Assume the colour of the piece does not matter, and that
-    there are no pawns among the pieces.
-
-    Write a program which takes as input:
-    The dimensions of the board: M, N
-    The number of pieces of each type (King, Queen, Bishop,
-    Rook and Knight) to try and place on the board.
-    As output, the program should list all the unique
-    configurations to the console for which all of the pieces
-    can be placed on the board without threatening each other.
-    -------------------------------------------------------------
-
-    Solution path
-    -------------
-    The algorithm, keeps placing pieces on the board until there
-    is no longer a safe square, modelling the human reaction to
-    the problem. The order of placement will be based on the
-    number of attacks a piece can provide in descending order,
-    which means Queen (q) -> Rook (r) -> Bishop (b) -> King (k)
-    -> Knight (n).
-
-    If the last piece has been placed, the solution is noted. If
-    fewer pieces than the total number of pieces have been placed,
-    then this is a dead end.  In either case, backtracking occurs.
-    The last piece placed on the board gets pulled, then it gets
-    moved to the next safe square. Backtrack occurs even after a
-    "good" attempt in order to get to a new solution. Backtracking
-    may repeat itself several times until the original misplaced
-    piece finally is proven to be a dead end.
-
-    The "attack graph" for each piece is precomputed up front,
-    and then we essentially ignore the geometry of the problem.
-    The "attack graph" is presented as a bit board, a one
-    dimensional array transformation of the rectangular board
-    (according to the problem). Coordinate (0, 0) represents
-    the lower-left board square.
-    -------------------------------------------------------------
 """
 
 # ///////////////////////////////////////////////////
@@ -62,6 +19,7 @@
 # ///////////////////////////////////////////////////
 # Python packages
 from itertools import product
+from itertools import permutations
 import math
 import time
 # ---------------------------------------------------
@@ -92,7 +50,8 @@ class Independence(object):
                 * `self.under_attack`   : dictionary of attack bit boards for a queen placed on
                                           every square on a given board
                 * `self.problem_list`   : array of pieces to be checked against each other, having
-                                          order according to problem description
+                                          order according to problem (unique input combination)
+                                          description
                 * `self.solution_list`  : array of pieces' positions (evolving in algorithm)
                 * `self.board_status`   : a dictionary of board statuses that is populated every
                                           time we put a queen "on board"
@@ -120,13 +79,15 @@ class Independence(object):
             self.problem_list.append('q')
 
         self.num_of_pieces = len(self.problem_list)
-        self.solution_list = []
 
         self.under_attack = {}
-        self.board_status = {}
-        self.pos = 0
+
         self.num_solutions = 0
         self.num_backtracks = 0
+
+        self.pos = 0
+        self.solution_list = []
+        self.board_status = {}
 
     # ///////////////////////////////////////////////////
     def create_bit_board(self):
@@ -166,6 +127,57 @@ class Independence(object):
         print '\n'
 
     # ///////////////////////////////////////////////////
+    def print_solution_board(self):
+        """
+            prints a solution  bit board, noting the
+            placement of current piece, taking into
+            account the fact that it has to calculate
+            rows and print them in reverse order
+        """
+        board_rows_dict = {}
+
+        for i in range(self.rows):
+            board_rows_dict[i] = [None] * self.cols
+            for j in range(self.cols):
+                index = self.coords_to_index((i, j))
+                board_rows_dict[i][j] = str(self.board[index])
+
+        for piece in self.solution_list:
+            row = int(math.floor(piece[0] / self.cols))
+            col = piece[0] % self.cols
+            board_rows_dict[row][col] = piece[1]
+
+        for i in reversed(range(self.rows)):
+            print board_rows_dict[i]
+
+        print '\n'
+
+    # ///////////////////////////////////////////////////
+    def print_solution_board_with_args(self, bit_board, piece):
+        """
+            prints a solution  bit board, noting the
+            placement of current piece, taking into
+            account the fact that it has to calculate
+            rows and print them in reverse order
+        """
+        board_rows_dict = {}
+
+        for i in range(self.rows):
+            board_rows_dict[i] = [None] * self.cols
+            for j in range(self.cols):
+                index = self.coords_to_index((i, j))
+                board_rows_dict[i][j] = str(bit_board[index])
+
+        row = int(math.floor(piece[0] / self.cols))
+        col = piece[0] % self.cols
+        board_rows_dict[row][col] = piece[1]
+
+        for i in reversed(range(self.rows)):
+            print board_rows_dict[i]
+
+        print '\n'
+
+    # ///////////////////////////////////////////////////
     def king_attacks(self, x_coord, y_coord):
         """
             for given coordinates,calculates king's attack
@@ -173,6 +185,10 @@ class Independence(object):
             denotes an index (coordinate) under attack
         """
         bit_board = self.create_bit_board()
+
+        index = self.coords_to_index((x_coord, y_coord))
+        bit_board[index] = 1
+
         moves = list(product([x_coord-1, x_coord+1], [y_coord-1, y_coord+1])) + \
                 list(product([x_coord], [y_coord-1, y_coord+1])) + \
                 list(product([x_coord-1, x_coord+1], [y_coord]))
@@ -192,6 +208,10 @@ class Independence(object):
             denotes an index (coordinate) under attack
         """
         bit_board = self.create_bit_board()
+
+        index = self.coords_to_index((x_coord, y_coord))
+        bit_board[index] = 1
+
         moves = list(product([x_coord-1, x_coord+1], [y_coord-2, y_coord+2])) + \
                 list(product([x_coord-2, x_coord+2], [y_coord-1, y_coord+1]))
         moves = [(x_coord, y_coord) for x_coord, y_coord in moves
@@ -239,6 +259,9 @@ class Independence(object):
         """
         bit_board = self.create_bit_board()
 
+        index = self.coords_to_index((x_coord, y_coord))
+        bit_board[index] = 1
+
         for i in range(self.cols):
             if i != y_coord:
                 bit_board[x_coord*self.cols + i] = 1
@@ -277,7 +300,8 @@ class Independence(object):
     def pre_compute(self):
         """
             `pre_compute()` is a public method of class Independence.
-            It is used to precompute all possible attacks.
+            It is used to precompute all possible attacks for all
+            possible pieces.
         """
         start = time.time()
 
@@ -294,6 +318,9 @@ class Independence(object):
             self.under_attack['b'][i] = self.bishop_attacks(row, col)
             self.under_attack['k'][i] = self.king_attacks(row, col)
             self.under_attack['n'][i] = self.knight_attacks(row, col)
+            # self.print_solution_board_with_args(self.under_attack['n'][i], (i, 'n'))
+            # self.print_board(self.under_attack['r'][i])
+
         end = time.time()
 
         print "precomputation time (sec): "
@@ -307,10 +334,19 @@ class Independence(object):
         """
         # retrieve a piece from problem specification
         piece = self.problem_list.pop()
+
+        # check if it attacks existing pieces
+        for existing_piece in self.solution_list:
+            pos_ex = existing_piece[0]
+            if self.under_attack[piece][position][pos_ex] == 1:
+                # put piece back to pending
+                self.problem_list.append(piece)
+                return None
+
         for i in range(self.rows * self.cols):
             # calculate new board based on attacks of specific piece
             self.board[i] = self.board[i] or self.under_attack[piece][position][i]
-        # self.print_board(self.board)
+
         return piece
 
     # ///////////////////////////////////////////////////
@@ -325,20 +361,15 @@ class Independence(object):
         del self.board_status[self.pos]
         self.pos += 1
         self.num_backtracks += 1
+        # print "backtrack"
+        # self.print_solution_board()
         # self.print_board(self.board)
 
     # ///////////////////////////////////////////////////
-    def play(self):
+    def algorithm(self):
         """
-            `play()` is a public method of class Independence.
-            It is used to play the independence game.
+            finds solutions in mxn board for arbitrary pieces
         """
-
-        self.pre_compute()
-
-        start = time.time()
-
-        # Find solutions in mxn board for arbitrary pieces
         while True:
             if self.pos >= self.rows * self.cols:
                 if len(self.solution_list) == 0:
@@ -350,17 +381,61 @@ class Independence(object):
             if self.board[self.pos] == 0:
                 # Save board status to remember in case of backtrack
                 self.board_status[self.pos] = list(self.board)
+
                 piece = self.attack(self.pos)
-                self.solution_list.append((self.pos, piece))
+
+                if piece:
+                    self.solution_list.append((self.pos, piece))
+                    # self.print_solution_board()
+
                 if len(self.solution_list) == self.num_of_pieces:
                     self.num_solutions += 1
-                    print self.solution_list
-                    print '\n'
+                    # print self.solution_list
+                    # print '\n'
+                    # self.print_solution_board()
                     self.backtrack()
+                    # print '\n'
             self.pos += 1
+
+    # ///////////////////////////////////////////////////
+    def play(self):
+        """
+            `play()` is a public method of class Independence.
+            It is used to play the independence game.
+        """
+        list_of_combinations = set(permutations(self.problem_list, self.num_of_pieces))
+        num_of_combinations = len(list_of_combinations)
+        print "\n"
+
+        self.pre_compute()
+
+        start = time.time()
+
+        print "\n"
+        print "# of combinations: " + str(num_of_combinations)
+        print "List of input combinations: "
+
+        combination_index = 1
+        for combination in list_of_combinations:
+            print str(combination_index) + "/" + str(num_of_combinations) + ":"
+            print combination
+
+            del self.problem_list[:]
+
+            for i in combination:
+                self.problem_list.append(i)
+
+            self.pos = 0
+            self.solution_list = []
+            self.board_status = {}
+
+            self.algorithm()
+
+            combination_index += 1
 
         end = time.time()
 
+        print "\n"
         print "calculation time (sec): "
         print end - start
         print "num of solutions: " + str(self.num_solutions)
