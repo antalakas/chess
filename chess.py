@@ -4,7 +4,7 @@
 
 """
     `chess` module collects input arguments and creates a
-    dictionary to be used as an input to Independence class
+    dictionary to be used as an input to Constraint class
 """
 
 # ///////////////////////////////////////////////////
@@ -21,7 +21,13 @@ import argparse
 # ///////////////////////////////////////////////////
 # Custom modules
 # ---------------------------------------------------
-from independence import Independence
+from constraint import Constraint
+from settings import king_type
+from settings import queen_type
+from settings import bishop_type
+from settings import rook_type
+from settings import knight_type
+
 
 # ///////////////////////////////////////////////////
 #  Chess - command line interface
@@ -30,7 +36,7 @@ from independence import Independence
 def chess():
     """
         `chess` function collects input arguments and creates a
-        dictionary to be used as an input to Independence class
+        dictionary to be used as an input to Constraint class
     """
 
     # ///////////////////////////////////////////////////
@@ -52,6 +58,7 @@ def chess():
 
     # ///////////////////////////////////////////////////
     params = {}
+    pieces = []
 
     if args.x_dim:
         params["m"] = int(args.x_dim)
@@ -64,30 +71,26 @@ def chess():
         return False
 
     if args.k_num:
-        params["k"] = int(args.k_num)
-    else:
-        params["k"] = 0
+        for i in range(int(args.k_num)):
+            pieces.append(king_type)
 
     if args.q_num:
-        params["q"] = int(args.q_num)
-    else:
-        params["q"] = 0
-
-    if args.r_num:
-        params["r"] = int(args.r_num)
-    else:
-        params["r"] = 0
+        for i in range(int(args.q_num)):
+            pieces.append(queen_type)
 
     if args.b_num:
-        params["b"] = int(args.b_num)
-    else:
-        params["b"] = 0
+        for i in range(int(args.b_num)):
+            pieces.append(bishop_type)
+
+    if args.r_num:
+        for i in range(int(args.r_num)):
+            pieces.append(rook_type)
 
     if args.kn_num:
-        params["kn"] = int(args.kn_num)
-    else:
-        params["kn"] = 0
+        for i in range(int(args.kn_num)):
+            pieces.append(knight_type)
 
+    params["pieces"] = pieces
     return params
 
 # ///////////////////////////////////////////////////
@@ -95,7 +98,7 @@ def chess():
 if __name__ == "__main__":
 
     try:
-        Independence(chess()).play()
+        Constraint(chess()).play()
 
     except KeyboardInterrupt:
         print "\n"

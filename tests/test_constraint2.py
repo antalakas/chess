@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
 """
-    `test_independence3` module is responsible for setting up
-    and running tests related to Independence module
+    `test_constraint` module is responsible for setting up
+    and running tests related to Constraint module
 """
 
 # ///////////////////////////////////////////////////
 # ---------------------------------------------------
-# File: test_independence3.py
+# File: test_constraint.py
 # Author: Andreas Ntalakas <antalakas>
 # ---------------------------------------------------
 
 # ///////////////////////////////////////////////////
-# independence modules
+# constraint modules
 # ---------------------------------------------------
-from chess import Independence
+from chess import Constraint
 # ---------------------------------------------------
 
 import unittest
@@ -22,10 +22,10 @@ import unittest
 # ///////////////////////////////////////////////////
 
 
-class TestIndependence3(unittest.TestCase):
+class TestConstraint2(unittest.TestCase):
     """
-        `TestIndependence3()` class is unit-testing the class
-        Independence().
+        `TestConstraint2()` class is unit-testing the class
+        Constraint().
     """
 
     # ///////////////////////////////////////////////////
@@ -33,17 +33,13 @@ class TestIndependence3(unittest.TestCase):
         params = {}
         params["m"] = 4
         params["n"] = 4
-        params["q"] = 0
-        params["r"] = 2
-        params["b"] = 0
-        params["k"] = 0
-        params["kn"] = 4
-        self.game = Independence(params)
+        params["pieces"] = [3, 3, 4, 4, 4, 4]
+        self.game = Constraint(params)
 
     # ///////////////////////////////////////////////////
-    def two_r_4_kn(self):
+    def solve(self):
         """
-            two rooks, four knights
+            Tests x dimension exists and is valid
         """
-        self.game.play()
-        self.assertEqual(self.game.num_solutions == 8, True)
+        self.game.search(0)
+        self.assertEqual(self.game.count == 8, True)
