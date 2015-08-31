@@ -19,25 +19,4 @@ can be placed on the board without threatening each other.
 
 ##Solution path
 
-The algorithm, keeps placing pieces on the board until there
-is no longer a safe square, modelling the human reaction to
-the problem. The order of placement will be computed based
-on the number of unique combinations of input pieces.
-
-If the last piece has been placed, the solution is noted. If
-fewer pieces than the total number of pieces have been placed,
-then this is a dead end.  In either case, backtracking occurs.
-The last piece placed on the board gets pulled, then it gets
-moved to the next safe square. Backtrack occurs even after a
-"good" attempt in order to get to a new solution. Backtracking
-may repeat itself several times until the original misplaced
-piece finally is proven to be a dead end.
-
-The "attack graph" for each piece is precomputed up front,
-and then we essentially ignore the geometry of the problem.
-The "attack graph" is presented as a bit board, a one
-dimensional array transformation of the rectangular board
-(according to the problem). Coordinate (0, 0) represents
-the lower-left board square.
-
-https://en.wikipedia.org/wiki/Mathematical_chess_problem
+Depth-fist search
