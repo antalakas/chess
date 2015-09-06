@@ -14,13 +14,11 @@
 # ///////////////////////////////////////////////////
 # Python packages
 import time
+from recordtype import recordtype
 # ---------------------------------------------------
 
 # ///////////////////////////////////////////////////
 # My modules
-from coordinate import Coordinate
-from position import Position
-
 from settings import king_type
 from settings import queen_type
 from settings import bishop_type
@@ -63,6 +61,9 @@ class Constraint(object):
             * `king_rules`    [8]coordinate
             * `knight_rules`  [8]coordinate
         """
+        Position = recordtype("Position", ["x", "y", "kind"])
+        Coordinate = recordtype("Coordinate", ["x", "y"])
+
         self.width = params["m"]
         self.height = params["n"]
         self.count = 0

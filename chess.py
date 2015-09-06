@@ -17,6 +17,7 @@
 # Python packages
 # ---------------------------------------------------
 import argparse
+import imp
 
 # ///////////////////////////////////////////////////
 # Custom modules
@@ -27,6 +28,15 @@ from settings import queen_type
 from settings import bishop_type
 from settings import rook_type
 from settings import knight_type
+
+# ///////////////////////////////////////////////////
+# Checks if the required modules have been installed.
+def dependencies():
+    try:
+        imp.find_module('recordtype')
+        return True
+    except ImportError:
+        return False
 
 
 # ///////////////////////////////////////////////////
@@ -98,7 +108,9 @@ def chess():
 if __name__ == "__main__":
 
     try:
-        Constraint(chess()).play()
-
+        if dependencies():
+            Constraint(chess()).play()
+        else:
+            raise Exception("Packages required: recordtype")
     except KeyboardInterrupt:
         print "\n"
