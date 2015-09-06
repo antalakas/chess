@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    `run_tests` module is responsible for running all tests
+`run_tests` module is responsible for running all tests
 """
 
 # ///////////////////////////////////////////////////////////

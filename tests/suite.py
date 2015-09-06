@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    `suite` module collects all tests and adds them
-    to the test suite
+`suite` module collects all tests and adds them
+to the test suite
 """
 
 # ///////////////////////////////////////////////////
@@ -31,8 +31,8 @@ from .test_constraint3 import TestConstraint3
 
 def test_suite():
     """
-        `test_suite()` method creates a test suite
-        for the unit-tests of independence package.
+    `test_suite()` method creates a test suite
+    for the unit-tests of independence package.
     """
 
     all_tests = unittest.TestSuite()

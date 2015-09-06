@@ -24,8 +24,8 @@ import unittest
 
 class TestConstraint2(unittest.TestCase):
     """
-        `TestConstraint2()` class is unit-testing the class
-        Constraint().
+    `TestConstraint2()` class is unit-testing the class
+    Constraint().
     """
 
     # ///////////////////////////////////////////////////
@@ -38,8 +38,6 @@ class TestConstraint2(unittest.TestCase):
 
     # ///////////////////////////////////////////////////
     def solve(self):
-        """
-            Tests x dimension exists and is valid
-        """
+        """Tests validity of solution"""
         self.game.search(0)
         self.assertEqual(self.game.count == 8, True)
