@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    `constraint` module is responsible for providing a basic
-    interface for playing the chess constraint game.
+`constraint` module is responsible for providing a basic
+interface for playing the chess constraint game.
 """
 
 # ///////////////////////////////////////////////////
@@ -33,33 +33,33 @@ from settings import symbols
 
 class Constraint(object):
     """
-        `Constraint()` class is responsible for providing a basic interface for
-        playing the chess constraint game.
+    `Constraint()` class is responsible for providing a basic interface for
+    playing the chess constraint game.
     """
 
     # ///////////////////////////////////////////////////
     def __init__(self, params):
         """
-            `__init__()` initializes the necessary objects for using the
-            Constraint.
+        `__init__()` initializes the necessary objects for using the
+        Constraint.
 
-            Attributes:
-            * `height`                              Board heigh.
-            * `width`                               Board width.
-            * `count`         int                   Number of solutions found.
-            * `board`         []position            List of currently allocated pieces.
-            * `board_index`   int                   Index in the list of allocated pieces.
-            * `pieces`        []int                 List of given pieces to allocate.
-            * `last_xy`       [][]coordinate        List of last used position
-                                                    per every type of piece.
-            * `last_index`    []int                 Index in the list of last positions.
-            * `used_cols`     []int                 Attacked columns.
-            * `used_rows`     []int                 Attacked rows.
-            * `used_diag_l`   []int                 Attacked diagonals (left)
-            * `used_diag_r`   []int                 Attacked diagonals (right)
-            * `used_cells`    []int                 Map of cells "under attack".
-            * `king_rules`    [8]coordinate
-            * `knight_rules`  [8]coordinate
+        Attributes:
+        `height`                         --     Board heigh.
+        `widt`                           --    Board width.
+        `count`         int              --     Number of solutions found.
+        `board`         []position       --     List of currently allocated pieces.
+        `board_index`   int              --     Index in the list of allocated pieces.
+        `pieces`        []int            --     List of given pieces to allocate.
+        `last_xy`       [][]coordinate   --     List of last used position
+                                         --     per every type of piece.
+        `last_index`    []int            --     Index in the list of last positions.
+        `used_cols`     []int            --     Attacked columns.
+        `used_rows`     []int            --     Attacked rows.
+        `used_diag_l`   []int            --     Attacked diagonals (left)
+        `used_diag_r`   []int            --     Attacked diagonals (right)
+        `used_cells`    []int            --     Map of cells "under attack".
+        `king_rules`    [8]coordinate    --     Permitted moves for king
+        `knight_rules`  [8]coordinate    --     Permitted moves for knight
         """
         Position = recordtype("Position", ["x", "y", "kind"])
         Coordinate = recordtype("Coordinate", ["x", "y"])
@@ -100,9 +100,7 @@ class Constraint(object):
         ]
 
     def print_board(self):
-        """
-            prints board
-        """
+        """prints board"""
         board_print = ['.'] * self.width * self.height
 
         for j in range(self.board_index):
@@ -114,8 +112,8 @@ class Constraint(object):
 
     def is_attacking(self, y_dim, x_dim, kind):
         """
-           checks whether the piece is attacking other
-           units from this position
+        checks whether the piece is attacking other
+        units from this position
         """
         i = 0
         while i < self.board_index:
@@ -142,9 +140,7 @@ class Constraint(object):
         return False
 
     def place_piece(self, y_dim, x_dim, kind, direction):
-        """
-            marks the board when we are placing next piece
-        """
+        """marks the board when we are placing next piece"""
         # Mark rows and columns.
         if (kind == rook_type) or (kind == queen_type):
             self.attacked_rows[y_dim] += direction
@@ -184,9 +180,7 @@ class Constraint(object):
             self.last_xy[kind][self.last_index[kind]].x = x_dim
 
     def search(self, piece_number):
-        """
-            recursive function implementing depth-first search
-        """
+        """recursive function implementing depth-first search"""
         # Recursive search function.
         if piece_number == len(self.pieces):
             # Found!
@@ -244,8 +238,8 @@ class Constraint(object):
     # ///////////////////////////////////////////////////
     def play(self):
         """
-            `play()` is a public method of class Constraint.
-            It is used to play the constraint game.
+        `play()` is a public method of class Constraint.
+        It is used to play the constraint game.
         """
         start = time.time()
         self.search(0)

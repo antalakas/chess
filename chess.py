@@ -3,8 +3,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    `chess` module collects input arguments and creates a
-    dictionary to be used as an input to Constraint class
+`chess` module collects input arguments and creates a
+dictionary to be used as an input to Constraint class
 """
 
 # ///////////////////////////////////////////////////
@@ -45,8 +45,8 @@ def dependencies():
 
 def chess():
     """
-        `chess` function collects input arguments and creates a
-        dictionary to be used as an input to Constraint class
+    `chess` function collects input arguments and creates a
+    dictionary to be used as an input to Constraint class
     """
 
     # ///////////////////////////////////////////////////
