@@ -61,8 +61,8 @@ class Constraint(object):
         `king_rules`    [8]coordinate    --     Permitted moves for king
         `knight_rules`  [8]coordinate    --     Permitted moves for knight
         """
-        Position = recordtype("Position", ["x", "y", "kind"])
-        Coordinate = recordtype("Coordinate", ["x", "y"])
+        position = recordtype("position", ["x", "y", "kind"])
+        coordinate = recordtype("coordinate", ["x", "y"])
 
         self.width = params["m"]
         self.height = params["n"]
@@ -71,7 +71,7 @@ class Constraint(object):
 
         self.board = []
         for _ in self.pieces:
-            self.board.append(Position(0, 0, 0))
+            self.board.append(position(0, 0, 0))
 
         self.board_index = 0
         self.last_xy = []
@@ -80,7 +80,7 @@ class Constraint(object):
         for _ in range(number_of_types):
             coord_list = []
             for _ in range(len(self.pieces) + 1):
-                coord_list.append(Coordinate(0, 0))
+                coord_list.append(coordinate(0, 0))
             self.last_xy.append(coord_list)
 
         self.attacked_cols = [0] * self.width
@@ -90,13 +90,13 @@ class Constraint(object):
         self.attacked_cells = [0] * ((self.width+4) * (self.height+4))
 
         self.king_rules = [
-            Coordinate(-1, 0), Coordinate(1, 0), Coordinate(0, -1), Coordinate(0, 1),
-            Coordinate(-1, -1), Coordinate(1, 1), Coordinate(1, -1), Coordinate(-1, 1)
+            coordinate(-1, 0), coordinate(1, 0), coordinate(0, -1), coordinate(0, 1),
+            coordinate(-1, -1), coordinate(1, 1), coordinate(1, -1), coordinate(-1, 1)
         ]
 
         self.knight_rules = [
-            Coordinate(-2, -1), Coordinate(-2, 1), Coordinate(2, -1), Coordinate(2, 1),
-            Coordinate(-1, -2), Coordinate(-1, 2), Coordinate(1, -2), Coordinate(1, 2)
+            coordinate(-2, -1), coordinate(-2, 1), coordinate(2, -1), coordinate(2, 1),
+            coordinate(-1, -2), coordinate(-1, 2), coordinate(1, -2), coordinate(1, 2)
         ]
 
     def print_board(self):

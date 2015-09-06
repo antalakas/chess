@@ -32,6 +32,7 @@ from settings import knight_type
 # ///////////////////////////////////////////////////
 # Checks if the required modules have been installed.
 def dependencies():
+    """checks for module project's dependencies"""
     try:
         imp.find_module('recordtype')
         return True
@@ -81,23 +82,23 @@ def chess():
         return False
 
     if args.k_num:
-        for i in range(int(args.k_num)):
+        for _ in range(int(args.k_num)):
             pieces.append(king_type)
 
     if args.q_num:
-        for i in range(int(args.q_num)):
+        for _ in range(int(args.q_num)):
             pieces.append(queen_type)
 
     if args.b_num:
-        for i in range(int(args.b_num)):
+        for _ in range(int(args.b_num)):
             pieces.append(bishop_type)
 
     if args.r_num:
-        for i in range(int(args.r_num)):
+        for _ in range(int(args.r_num)):
             pieces.append(rook_type)
 
     if args.kn_num:
-        for i in range(int(args.kn_num)):
+        for _ in range(int(args.kn_num)):
             pieces.append(knight_type)
 
     params["pieces"] = pieces
